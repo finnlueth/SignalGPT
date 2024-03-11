@@ -24,16 +24,14 @@ nvidia-smi
 # nvidia-smi -q | head
 
 sudo yum install git -y
-sudo yum install python311
+sudo yum install python311 -y
 sudo yum update -y
-nano ~/.bashrc
+nano ~/.bashrc # alias python=python3
 sudo yum -y install python-pip
 pip install poetry
 
 git config --global user.name "name"
 git config --global user.email "email"
 
-sudo dnf install kernel-modules-extra
-
-
+ssh-keygen -t ed25519 -C "email"
 ```
