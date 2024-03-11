@@ -64,8 +64,8 @@ class ProstT5EncoderModelTokenClassificationCRF(T5EncoderModel):
             return_dict=return_dict,
         )
         sequence_output = encoder_outputs["last_hidden_state"]
-        
-        truncate_prost_t5_emebddings_for_crf(input_ids, attention_mask, sequence_output, labels)
+
+        input_ids, attention_mask, sequence_output, labels = truncate_prost_t5_emebddings_for_crf(input_ids, attention_mask, sequence_output, labels)
 
         sequence_output = self.custom_dropout(sequence_output)
 

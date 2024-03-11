@@ -14,3 +14,5 @@ def truncate_prost_t5_emebddings_for_crf(input_ids, attention_mask, sequence_out
     attention_mask = attention_mask * (labels != -1)
 
     sequence_output = sequence_output[:, 1:-1, :]
+
+    return input_ids, attention_mask, sequence_output, labels

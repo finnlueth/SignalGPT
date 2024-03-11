@@ -1,5 +1,5 @@
-# base_model_name = 'Rostlab/prot_t5_xl_uniref50'
-base_model_name = 'Rostlab/ProstT5'
+base_model_name = 'Rostlab/prot_t5_xl_uniref50'
+# base_model_name = 'Rostlab/ProstT5'
 model_version = 0
 
 # Debug
