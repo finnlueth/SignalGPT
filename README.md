@@ -9,37 +9,31 @@ It matches the performance of previous methods while being lightweight and inexp
 
 ## EC2 Commands
 ```sh
-sudo yum install git -y
+aws configure
+aws configure list
+# set up new key and add to aws configure
+
+sudo yum erase nvidia cuda
 sudo yum install gcc make
+sudo yum install -y gcc kernel-devel-$(uname -r)
+aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
+chmod +x NVIDIA-Linux-x86_64*.run
+sudo dnf install kernel-modules-extra
+sudo /bin/sh ./NVIDIA-Linux-x86_64*.run
+nvidia-smi
+# nvidia-smi -q | head
+
+sudo yum install git -y
 sudo yum install python311
 sudo yum update -y
 nano ~/.bashrc
 sudo yum -y install python-pip
 pip install poetry
 
-aws configure
-aws configure list
-# set up new key and add to aws configure
-
-sudo vim /etc/modprobe.d/nvidia-graphics-drivers.conf
-# add 
-# blacklist nouveau
-# blacklist lbm-nouveau
-# alias nouveau off
-# alias lbm-nouveau off
-
-
-sudo yum erase nvidia cuda
-sudo yum install -y gcc kernel-devel-$(uname -r)
-aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
-# aws s3 ls --recursive s3://ec2-linux-nvidia-drivers/
-chmod +x NVIDIA-Linux-x86_64*.run
-sudo /bin/sh ./NVIDIA-Linux-x86_64*.run
-
-nvidia-smi -q | head
-
 git config --global user.name "name"
 git config --global user.email "email"
+
+sudo dnf install kernel-modules-extra
 
 
 ```
