@@ -16,8 +16,8 @@ data_model_version = 6
 dataset_name = f'{data_model_version}_SignalP_{data_model_version}.0_Training_set.fasta'
 raw_dataset_path = '/data/raw/'
 processed_dataset_path = '/data/processed/'
-dataset_size = 3
-# dataset_size = None
+# dataset_size = 3
+dataset_size = None
 data_name = f'sp{data_model_version}_unprocessed'
 
 # Training

@@ -106,3 +106,8 @@ crf = src.model.ConditionalRandomField(
 # print('logits', logits_crf.shape, logits_crf.dtype, logits_crf, logits_crf.min(), logits_crf.max())
 # print('labels', labels_crf.shape, labels_crf.dtype, labels_crf, labels_crf.min(), labels_crf.max())
 # print('attention_mask', attention_mask_crf.shape, attention_mask_crf.dtype, attention_mask_crf)
+
+
+# model_config.select_encoding_type.keys()
+# df_data = src.data.process(src.data.parse_file(ROOT + '/data/raw/' + model_config.dataset_name))
+# df_data['Label'].apply(lambda x: len(x)).describe()

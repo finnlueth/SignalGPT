@@ -54,7 +54,7 @@ class ProstT5EncoderModelTokenClassificationCRF(T5EncoderModel):
         return_dict = (
             return_dict if return_dict is not None else self.config.use_return_dict
         )
-
+        print('encoder_outputs...')
         encoder_outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -64,7 +64,8 @@ class ProstT5EncoderModelTokenClassificationCRF(T5EncoderModel):
             return_dict=return_dict,
         )
         sequence_output = encoder_outputs["last_hidden_state"]
-
+        
+        print('truncate')
         input_ids, attention_mask, sequence_output, labels = truncate_prost_t5_emebddings_for_crf(input_ids, attention_mask, sequence_output, labels)
 
         sequence_output = self.custom_dropout(sequence_output)
@@ -73,8 +74,10 @@ class ProstT5EncoderModelTokenClassificationCRF(T5EncoderModel):
 
         loss = None
         decoded_tags = None
-
+        
+        print('crf')
         if labels is not None:
+            print('log')
             logits_crf = logits
             labels_crf = labels
             attention_mask_crf = attention_mask
@@ -86,14 +89,17 @@ class ProstT5EncoderModelTokenClassificationCRF(T5EncoderModel):
             )
             loss = -(log_likelihood / 1000)
         else:
+            print('viterbi')
             decoded_tags = self.crf.viterbi_tags(
                 logits=logits,
                 mask=attention_mask.type(torch.uint8)
             )
-
+        
         if not return_dict:
             output = (logits,) + encoder_outputs[2:]
             return ((loss,) + output) if loss is not None else output
+
+        print('done')
         return modeling_outputs.TokenClassifierOutput(
             loss=loss,
             logits=logits if decoded_tags is None else decoded_tags,

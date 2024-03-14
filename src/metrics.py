@@ -12,6 +12,12 @@ roc_auc_score_metric = evaluate.load("roc_auc", "multiclass")
 matthews_correlation_metric = evaluate.load("matthews_correlation")
 
 
+def compute_metrics(p):
+    predictions, references = p
+    results = batch_eval_elementwise(predictions=predictions, references=references)
+    return results
+
+
 def batch_eval_elementwise(predictions: np.ndarray, references: np.ndarray):
     results = {}
     # print(predictions, references)
@@ -21,12 +27,14 @@ def batch_eval_elementwise(predictions: np.ndarray, references: np.ndarray):
     #     print('has nan')
     #     predictions = np.nan_to_num(predictions)
 
-    argmax_predictions = predictions.argmax(axis=-1)
-    references = references[:, 1:-1]
-    # print(argmax_predictions.shape, references.shape)
+    # references = references[:, 1:-1]
+    # predictions = predictions[:, 1:-1, :]
+    predictions = predictions.argmax(axis=-1)
+    # print(predictions.shape, references.shape)
+
     vals = list(
         (np.array(p)[(r != -100)], np.array(r)[(r != -100)])
-        for p, r in zip(argmax_predictions.tolist(), references)
+        for p, r in zip(predictions.tolist(), references)
     )
 
     lst_pred, lst_true = zip(*vals)
@@ -35,11 +43,8 @@ def batch_eval_elementwise(predictions: np.ndarray, references: np.ndarray):
     )
 
     results.update(
-        {
-            "accuracy_metric": np.average(
-                [
-                    accuracy_metric.compute(predictions=x, references=y)["accuracy"]
-                    for x, y in vals
+        {"accuracy_metric": np.average(
+                [accuracy_metric.compute(predictions=x, references=y)["accuracy"] for x, y in vals
                 ]
             )
         }
@@ -95,24 +100,6 @@ def batch_eval_elementwise(predictions: np.ndarray, references: np.ndarray):
     )
     results.update({"confusion_matrix": confusion_matrix})
 
-    return results
-
-
-def compute_metrics(p):
-    predictions, references = p
-    # if type(predictions) is tuple:
-    #     predictions = predictions[0]
-    # print(predictions)
-    # print(type(predictions))
-    # print(predictions[0].shape)
-    # print(predictions[1].shape)
-    # print(predictions[1])
-
-    # print('---- eval ----')
-    # print('predictions', predictions.shape, predictions)
-    # print('references', references.shape, references)
-
-    results = batch_eval_elementwise(predictions=predictions, references=references)
     return results
 
 

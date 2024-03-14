@@ -116,13 +116,17 @@ def create_datasets(
     datasets = {}
 
     for split_name, split in splits.items():
+        # print(split_name, split)
         if sequence_type and sequence_type != "ALL":
             data_split = data[data["Type"] == sequence_type]
         else:
             data_split = data
         if dataset_size:
-            data_split = data_split[data_split.Partition_No.isin(split)].sample(
-                n=dataset_size * len(split), random_state=1
+            data_split = data_split[data_split.Partition_No.isin(split)]
+            data_split = data_split.sample(
+                n=min(data_split.shape[0], dataset_size * len(split)),
+                random_state=1,
+                replace=False
             )
         else:
             data_split = data_split[data_split.Partition_No.isin(split)]
