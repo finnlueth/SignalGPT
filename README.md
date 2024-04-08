@@ -34,4 +34,10 @@ git config --global user.name "name"
 git config --global user.email "email"
 
 ssh-keygen -t ed25519 -C "email"
+
+sudo yum install docker
+sudo usermod -a -G docker ec2-user
+newgrp docker
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
 ```
